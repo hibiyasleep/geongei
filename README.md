@@ -15,10 +15,10 @@ const FORMAT = 'M월 D일 H시'
 
 g.fetch((e, d) => {
   if(e) return console.error(e)
-  d.rents.forEach(rents => {
-    rents.forEach(_ => {
+  d.rents.forEach(day => {
+    day.forEach(_ => {
       console.log(`#${_.aid}: ${_.start.format(FORMAT)}부터 ${_.totalDuration}시간 (${_.comment})`)
-      for(let k in _.rents) {
+      for(let k in _.devices) {
         let v = _.rents[k]
         console.log(`* ${k}: ${v.duration || '-'}시간 ${v.count || 1}대`)
       }
