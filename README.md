@@ -27,8 +27,20 @@ Geongei((e, c) => {
 })
 ```
 
-Structure
----------
+Docs
+----
+
+### Geongei (GeongeiFetcher)
+
+`Geongei([option,] callback)`
+
+* `option`: Object
+  * `year`
+  * `month`
+  * `collection`: if it's `GeongeiCollection`, callback will provide merged collection.
+* `callback`: function
+  * `e`: error (from request)
+  * `c`: collection
 
 ### GeongeiCollection
 
@@ -40,13 +52,13 @@ Structure
 
 ### Rent
 
-* `.aid`: articleid, naver cafe-related.
-* `.sid`: scheduleid, naver cafe-related.
+* `.aid`: article id, naver cafe-related.
+* `.sid`: schedule id, naver cafe-related.
 * `.start`, `end`: `moment` object
 * `.date`: date of month, of start time
 * `.comment`: related comment (usually 'who rented this device')
 * `.totalDuration`: `end - start`, in hour
-* `.devices`: k->v object
+* `.devices`: Object
   * key: `sdvx`, `iidx`, `jubeat`, `drum`
   * value:
     * `duration`: in hour, if specified
