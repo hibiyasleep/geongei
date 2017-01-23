@@ -111,7 +111,6 @@ class Geongei {
   }
 
   _get(m, d) {
-    console.log(m, d)
     if(m !== this.month) {
       return false
     } else {
