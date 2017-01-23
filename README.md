@@ -8,19 +8,22 @@ Usage
 
 ```js
 const moment = require('moment')
-const Geongei = require('geongei')
+const Geongei = require('./index.js')
 
 const FORMAT = 'M월 D일 H시'
 
-Geongei((e, c) => {
+Geongei({
+  year: 2017,
+  month: 1
+}, (e, c) => {
   if(e) return console.error(e)
 
-  c.rents.forEach(day => {
+  c.rents[2017][1].forEach(day => {
     day.forEach(_ => {
       console.log(`#${_.aid}: ${_.start.format(FORMAT)}부터 ${_.totalDuration}시간 (${_.comment})`)
       for(let k in _.devices) {
-        let v = _.rents[k]
-        console.log(`* ${k}: ${v.duration || '-'}시간 ${v.count || 1}대`)
+        let v = _.devices[k]
+        console.log(`* ${k}: ${v.duration || _.totalDuration}시간 ${v.count || 1}대`)
       }
     })
   })

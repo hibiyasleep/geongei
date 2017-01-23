@@ -71,7 +71,7 @@ class GeongeiCollection {
 
   append(year, month, raw) {
     if(!(year in this.rents)) this.rents[year] = {}
-    if(!(month in this.rents[year])) this.rents[year][month] = {}
+    if(!(month in this.rents[year])) this.rents[year][month] = []
 
     raw.forEach(_ => {
       let r = new Rent(_)
@@ -116,6 +116,7 @@ const Geonget = function GeongeiFetcher(option, callback) {
     callback = option
     option = undefined
   }
+  if(!option) option = {}
   if(!('month' in option) || option.month < 1 || 12 < option.month) {
     option.month = d.getMonth() + 1
   }
@@ -141,7 +142,7 @@ const Geonget = function GeongeiFetcher(option, callback) {
       else
         c = new GeongeiCollection()
 
-      c.append(year, month, o.returnValue.todo)
+      c.append(option.year, option.month, o.returnValue.todo)
       if(callback) callback(null, c)
     })
 }
