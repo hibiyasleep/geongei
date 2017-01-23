@@ -1,0 +1,10 @@
+{
+  "name": "geongei",
+  "description": "Machine-rent calendar parser for 건대게임천국 Game center",
+  "version": "0.0.1",
+  "dependencies": {
+    "iconv-lite": "0.4.x",
+    "request": "2.x",
+    "moment": "2.x"
+  }
+}
