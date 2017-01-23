@@ -136,7 +136,7 @@ const Geonget = function GeongeiFetcher(option, callback) {
       let o = JSON.parse(d)
       let c
 
-      if(option.collection)
+      if(option.collection instanceof GeongeiCollection)
         c = option.collection
       else
         c = new GeongeiCollection()
