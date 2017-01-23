@@ -63,61 +63,87 @@ class Rent {
 
 }
 
-class Geongei {
+class GeongeiCollection {
 
-  constructor(year, month) {
-    const d = new Date()
-    this.rents = []
-
-    if(!month || month < 1 || 12 < month) {
-      this.month = d.getMonth() + 1
-    }
-    if(!year || year < 2009) {
-      this.year = d.getYear() + 1900
-    }
+  constructor() {
+    this.rents = {}
   }
 
-  fetch(callback) {
-    request
-      .get(URL(this.year, this.month))
-      .pipe(iconv.decodeStream('euc-kr'))
-      .pipe(iconv.encodeStream('utf-8'))
-      .collect((e, d) => {
-        if(e) {
-          callback(e, null)
-          return
-        }
+  append(year, month, raw) {
+    if(!(year in this.rents)) this.rents[year] = {}
+    if(!(month in this.rents[year])) this.rents[year][month] = {}
 
-        let o = JSON.parse(d)
-        o.returnValue.todo.forEach(_ => {
-          let r = new Rent(_)
-          if(!this.rents[r.date]) {
-            this.rents[r.date] = [r]
-          } else {
-            this.rents[r.date].push(r)
-          }
-        })
-        if(callback) callback(null, this)
+    raw.forEach(_ => {
+      let r = new Rent(_)
+      if(!this.rents[year][month][r.date]) {
+        this.rents[year][month][r.date] = [r]
+      } else {
+        this.rents[year][month][r.date].push(r)
+      }
+    })
+  }
+
+  merge(collection) {
+    collection.rents.forEach((y, yk) => {
+      y.forEach((m, mk) => {
+        this.rents[yk][mk] = m
       })
+    })
   }
 
   get today() {
     let today = moment()
-    return this._get(today.month() + 1, today.date())
+    return this._get(today.year(), today.month() + 1, today.date())
   }
   get tomorrow() {
     let tomorrow = moment().add(1, 'day')
-    return this._get(tomorrow.month() + 1, tomorrow.date())
+    return this._get(tomorrow.year(), tomorrow.month() + 1, tomorrow.date())
   }
 
-  _get(m, d) {
-    if(m !== this.month) {
+  _get(y, m, d) {
+    if(!(y in this.rents) || !(m in this.rents[y])) {
       return false
     } else {
-      return this.rents[d]
+      return this.rents[y][m][d]
     }
   }
-
 }
 
-module.exports = Geongei
+const Geonget = function GeongeiFetcher(option, callback) {
+  const d = new Date()
+
+  if(arguments.length === 1) {
+    callback = option
+    option = undefined
+  }
+  if(!('month' in option) || option.month < 1 || 12 < option.month) {
+    option.month = d.getMonth() + 1
+  }
+  if(!('year' in option) || option.year < 2009) {
+    option.year = d.getYear() + 1900
+  }
+
+  request
+    .get(URL(option.year, option.month))
+    .pipe(iconv.decodeStream('euc-kr'))
+    .pipe(iconv.encodeStream('utf-8'))
+    .collect((e, d) => {
+      if(e) {
+        callback(e, null)
+        return
+      }
+
+      let o = JSON.parse(d)
+      let c
+
+      if(option.collection)
+        c = option.collection
+      else
+        c = new GeongeiCollection()
+
+      c.append(year, month, o.returnValue.todo)
+      if(callback) callback(null, c)
+    })
+}
+
+module.exports = Geonget
