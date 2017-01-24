@@ -8,7 +8,7 @@ Usage
 
 ```js
 const moment = require('moment')
-const Geongei = require('./index.js')
+const Geongei = require('geongei')
 
 const FORMAT = 'M월 D일 H시'
 
