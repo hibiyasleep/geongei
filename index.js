@@ -13,8 +13,9 @@ const REGEX = {
 const MACHINE = { // sort by frequncy
   'sdvx': /사볼/,
   'iidx': /투덱/,
+  'popn': /팝픈/,
   'jubeat': /유(비트|빗)/,
-  'drum': /드럼/
+  'drum': /드럼|도라/
 }
 
 class Rent {
